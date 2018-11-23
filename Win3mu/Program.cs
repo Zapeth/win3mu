@@ -31,6 +31,7 @@ namespace Win3mu
             if (args.Length == 0)
             {
                 MessageBox(IntPtr.Zero, "Usage: win3mu <programName> [/debug|/release] [/break] [/config:name]", "Win3mu", 0x10);
+                return 1;
             }
             string fullPath = args[0];
             if (Path.IsPathRooted(args[0]) == false)
