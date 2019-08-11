@@ -2286,27 +2286,36 @@ namespace Win3muCore
         }
 
         // 010B - SHOWSCROLLBAR
-        [EntryPoint(0x010b)]
+        [EntryPoint(0x010B)]
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ShowScrollBar(IntPtr hWnd, int wBar, [MarshalAs(UnmanagedType.Bool)] bool bShow);
-        // 010C - GLOBALADDATOM
-        [EntryPoint(0x010c)]
-        [DllImport("kernel32.dll")]
-        public static extern uint GlobalAddAtom(string lpString);
 
+        // 010C - GLOBALADDATOM
+        [EntryPoint(0x010C)]
+        [DllImport("kernel32.dll")]
+        public static extern ushort GlobalAddAtomA(string lpString);
         // 010D - GLOBALDELETEATOM
-        [EntryPoint(0x010d)]
+        [EntryPoint(0x010D)]
         [DllImport("kernel32.dll")]
-        public static extern uint GlobalDeleteAtom(string lpString);
+        public static extern ushort GlobalDeleteAtom(string lpString);
         // 010E - GLOBALFINDATOM
-        [EntryPoint(0x010e)]
+        [EntryPoint(0x010E)]
         [DllImport("kernel32.dll")]
-        public static extern uint GlobalFindAtom(string lpString);
+        public static extern ushort GlobalFindAtomA(string lpString);
+
+        [DllImport("kernel32.dll")]
+        static extern uint GlobalGetAtomNameA(ushort nAtom, StringBuilder lpBuffer, int nSize);
+
         // 010F - GLOBALGETATOMNAME
-        [EntryPoint(0x010f)]
-        [DllImport("kernel32.dll")]
-        public static extern uint GlobalGetAtomName(ushort nAtom, StringBuilder lpBuffer, int nSize);
+        [EntryPoint(0x010F)]
+        public ushort GlobalGetAtomName(ushort nAtom, uint lpString, nint nSize)
+        {
+            StringBuilder AtomName = new StringBuilder(nSize);
+            uint Size2 = GlobalGetAtomNameA(nAtom, AtomName, nSize);
+            _machine.WriteString(lpString, AtomName.ToString(), (ushort)Size2);
+            return (ushort)Size2;
+        }
 
         [EntryPoint(0x0110)]
         [DllImport("user32.dll")]
