@@ -828,5 +828,37 @@ namespace Win3muCore
                 };
             }
         }
+
+        [StructLayout(LayoutKind.Sequential)]
+        [MappedType]
+        public struct TIMECAPS
+        {
+            public uint wPeriodMin;
+            public uint wPeriodMax;
+
+            public Win16.TIMECAPS Convert()
+            {
+                return new Win16.TIMECAPS()
+                {
+                    wPeriodMin = unchecked((ushort)wPeriodMin),
+                    wPeriodMax = (wPeriodMax < ushort.MaxValue ? unchecked((ushort)wPeriodMax) : ushort.MaxValue),
+                };
+            }
+
+            public override string ToString()
+            {
+                return string.Format("Win32.TIMECAPS({0},{1})", wPeriodMin, wPeriodMax);
+            }
+
+            public static Win16.TIMECAPS To16(Win32.TIMECAPS tc32)
+            {
+                return tc32.Convert();
+            }
+
+            public static Win32.TIMECAPS To32(Win16.TIMECAPS tc16)
+            {
+                return tc16.Convert();
+            }
+        }
     }
 }

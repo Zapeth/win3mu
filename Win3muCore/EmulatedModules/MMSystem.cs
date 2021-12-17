@@ -186,10 +186,33 @@ namespace Win3muCore
         // 0259 - TIMEGETSYSTEMTIME - 0259
         // 025A - TIMESETEVENT - 025A
         // 025B - TIMEKILLEVENT - 025B
+
+        [DllImport("winmm.dll")]
+        public static extern nuint timeGetDevCaps(out Win32.TIMECAPS lpCaps, uint wSize);
+
         // 025C - TIMEGETDEVCAPS - 025C
+        [EntryPoint(0x025C)]
+        public uint timeGetDevCaps(out Win16.TIMECAPS lpCaps, ushort wSize)
+        {
+            uint size = (uint)Marshal.SizeOf<Win32.TIMECAPS>();
+            Win32.TIMECAPS tc32;
+            var ret = timeGetDevCaps(out tc32, size);
+            lpCaps = tc32.Convert();
+            return ret;
+        }
+
         // 025D - TIMEBEGINPERIOD - 025D
+        [EntryPoint(0x025D)]
+        [DllImport("winmm.dll")]
+        public static extern nuint timeBeginPeriod(uint uPeriod);
         // 025E - TIMEENDPERIOD - 025E
+        [EntryPoint(0x025E)]
+        [DllImport("winmm.dll")]
+        public static extern nuint timeEndPeriod(uint uPeriod);
         // 025F - TIMEGETTIME - 025F
+        [EntryPoint(0x025F)]
+        [DllImport("winmm.dll")]
+        public static extern nuint timeGetTime();
 
         [DllImport("winmm.dll", CharSet = CharSet.Unicode, EntryPoint = "mciSendCommandW")]
         public static extern uint mciSendCommand(uint IDDevice, uint message, IntPtr fdwCommand, IntPtr dwParam);
