@@ -645,6 +645,16 @@ namespace Win3muCore
                     _paramPos += 4;
                     return new Win32.POINT(x, y);
                 }
+                if (pt == typeof(Win16.RECT))
+                {
+                    var rect = new Win16.RECT();
+                    rect.Left = unchecked((short)_machine.ReadWord(_machine.ss, _paramPos));
+                    rect.Top = unchecked((short)_machine.ReadWord(_machine.ss, (ushort)(_paramPos + 2)));
+                    rect.Right = unchecked((short)_machine.ReadWord(_machine.ss, (ushort)(_paramPos + 4)));
+                    rect.Bottom = unchecked((short)_machine.ReadWord(_machine.ss, (ushort)(_paramPos + 6)));
+                    _paramPos += 8;
+                    return rect;
+                }
                 if (pt == typeof(IntPtr))
                 {
                     if (pi!=null)
