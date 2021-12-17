@@ -240,7 +240,14 @@ namespace Win3muCore
         }
 
         // 001A - GLOBALFREEALL
+
         // 001C - GLOBALMASTERHANDLE
+        [EntryPoint(0x001C)]
+        public uint GlobalMasterHandle()
+        {
+            // stub, Applications should interpret this as "No Global Heap"
+            return 0;
+        }
 
         [EntryPoint(0x001d)]
         public void Yield()
