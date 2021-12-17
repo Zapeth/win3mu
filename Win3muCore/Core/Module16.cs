@@ -445,6 +445,16 @@ namespace Win3muCore
                                     break;
                                 }
 
+                                case RelocationAddressType.LowByte:
+                                {
+                                    uint addr = module.GetProcAddress(reloc.param2);
+                                    if (addr==0)
+                                         throw new VirtualException("Module link failed, function ordinal #{0:X4} not found in module '{1}'", reloc.param2, moduleName);
+
+                                    ApplyRelocations(data, reloc.offset, addr & 0xFF, additive, machine.logRelocations);
+                                    break;
+                                }
+
                                 default:
                                     throw new NotImplementedException(string.Format("Unsupported relocation type: {0}/{1}", reloc.type, reloc.addressType));
                             }
@@ -509,6 +519,16 @@ namespace Win3muCore
                                             throw new VirtualException("Module link failed, function ordinal #{0:X4} not found in module '{1}'", reloc.param2, moduleName);
 
                                         ApplyRelocations(data, reloc.offset, addr.Loword(), additive, machine.logRelocations);
+                                        break;
+                                    }
+
+                                case RelocationAddressType.LowByte:
+                                    {
+                                        uint addr = module.GetProcAddress(entryPointOrdinal);
+                                        if (addr == 0)
+                                            throw new VirtualException("Module link failed, function ordinal #{0:X4} not found in module '{1}'", reloc.param2, moduleName);
+
+                                        ApplyRelocations(data, reloc.offset, addr & 0xFF, additive, machine.logRelocations);
                                         break;
                                     }
 
