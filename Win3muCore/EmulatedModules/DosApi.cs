@@ -747,6 +747,27 @@ namespace Win3muCore
             throw new NotImplementedException(string.Format("Unsupported Multiplex (0x2f) Interrupt - ax=0x{0:X4}", _cpu.ax));
         }
 
+        public void DispatchInt31()
+        {
+            // DPMI services
+            // http://www.techhelpmanual.com/571-dpmi_services.html
+            switch (_cpu.ah)
+            {
+                case 0x02:
+                    switch (_cpu.al)
+                    {
+                        case 0x02:  // get processor exception handler vector
+                            _cpu.cx = 0;
+                            _cpu.dx = 0;
+                            return;
+                        case 0x03:  // set processor exception handler vector
+                            return;
+                    }
+                    break;
+            }
+
+            throw new NotImplementedException(string.Format("Unsupported DPMI (0x31) Interrupt - ax=0x{0:X4}", _cpu.ax));
+        }
 
 
         ushort _lastError = 0;

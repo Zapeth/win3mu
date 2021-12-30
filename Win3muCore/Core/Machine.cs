@@ -613,6 +613,10 @@ namespace Win3muCore
                 case 0x2f:
                     _dos.DispatchInt2f();
                     return;
+
+                case 0x31:
+                    _dos.DispatchInt31();
+                    return;
             }
 
             base.RaiseInterrupt(interruptNumber);
