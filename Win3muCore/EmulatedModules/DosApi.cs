@@ -736,8 +736,9 @@ namespace Win3muCore
                     // MSCDEX services
                     switch (_cpu.al)
                     {
-                        case 0:
-                            _cpu.al = 0;        // 0xFF if installed
+                        case 0x00:  // count drive letters
+                            _cpu.bx = 0;
+                            _cpu.cx = 0;
                             return;
                     }
                     break;
